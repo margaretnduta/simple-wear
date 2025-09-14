@@ -57,7 +57,7 @@
                         </x-nav-link>
                     @endif
 
-                    <!-- Account dropdown (ALL logged-in users: admin + customer) -->
+                    <!-- Account dropdown (ALL logged-in users) -->
                     <div class="relative" x-data="{ openAcc:false }">
                         <button @click="openAcc = !openAcc" class="inline-flex items-center focus:outline-none">
                             <svg class="h-6 w-6 text-gray-700" viewBox="0 0 24 24" fill="currentColor">
@@ -100,14 +100,28 @@
                     <x-nav-link :href="route('about')" :active="request()->routeIs('about')">About</x-nav-link>
                     <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')">Contact</x-nav-link>
 
-                    <x-nav-link :href="route('login')">Account</x-nav-link>
+                    <!-- Guest Account dropdown: Login + Register -->
+                    <div class="relative" x-data="{ openGuest:false }">
+                        <button @click="openGuest = !openGuest" class="inline-flex items-center focus:outline-none">
+                            <svg class="h-6 w-6 text-gray-700" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V22h19.2v-2.8c0-3.2-6.4-4.8-9.6-4.8z"/>
+                            </svg>
+                            <svg class="ml-1 h-4 w-4 text-gray-700" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <div x-show="openGuest" @click.away="openGuest=false"
+                             class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-[1000]">
+                             <a href="{{ route('login') }}" class="block px-3 py-2 text-sm hover:bg-gray-50">Log in</a>
+                             <a href="{{ route('register') }}" class="block px-3 py-2 text-sm hover:bg-gray-50">Register</a>
+                        </div>
+                    </div>
+
+                    <!-- Cart (no badge count for guests by default) -->
                     <x-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.index')">
                         <span class="inline-flex items-center">
                             <svg class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.01 9h11.24l-1.2 6H8.2l-1.19-6zM6.16 7l-.94-4H3V2h2l1.78 9H18c.46 0 .86.31.97.76l1.76 7.04-.97.24-1.76-7.04H8.2L6.16 7z"/></svg>
                             Cart
-                            @if(!empty($cartCount))
-                                <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs bg-emerald-600 text-white">{{ $cartCount }}</span>
-                            @endif
                         </span>
                     </x-nav-link>
                 @endguest
@@ -178,11 +192,14 @@
                 <x-responsive-nav-link :href="route('women')" :active="request()->routeIs('women')">Women</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')">About</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')">Contact</x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.index')">Cart</x-responsive-nav-link>
+
+                <!-- Guest: login + register -->
                 <div class="mt-3 space-y-1 border-t pt-3">
                     <x-responsive-nav-link :href="route('login')">Log in</x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('register')">Register</x-responsive-nav-link>
                 </div>
+
+                <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.index')">Cart</x-responsive-nav-link>
             @endguest
         </div>
     </div>
